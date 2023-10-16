@@ -1,0 +1,43 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    height: 100vh; /* Make the body take the full viewport height */
+    margin: 0; /* Remove default margin */
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex-direction: column; /* Stack children vertically */
+}
+
+/* Ensure the image doesn't exceed the viewport width */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* The container for the type buttons. This will help align them in a grid */
+div.type-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* Creates 4 equally spaced columns */
+    gap: 10px; /* Space between grid items */
+    width: 30%; /* Adjust as needed */
+    margin: 20px auto; /* Center the grid */
+}
+
+/* Style for the type buttons */
+button.type-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button.type-button:hover {
+    background-color: #ddd;
+}
+
+.type-button.active {
+    background-color: #3498db;
+    color: white;
+}
