@@ -167,8 +167,6 @@ function setAllCheckboxes(state) {
         const checkbox = document.getElementById(`gen${i}`);
         checkbox.checked = state;
     }
-    const selectedGens = state ? [1, 2, 3, 4, 5, 6, 7, 8, 9] : [];
-    loadPokemonsForGenerations(selectedGens);
 }
 
 // ----------------- Initialization -----------------
@@ -187,6 +185,8 @@ window.onload = async function () {
         await fetchPokemonsForGenerations(savedGens);  // Add await here to ensure it completes
     } else {
         // Default to Gen 1
+        console.log("No saved data found. Defaulting to gen 1...")
+        setAllCheckboxes(false);
         document.getElementById('gen1').checked = true;
         await fetchPokemonsForGenerations([1]);  // Add await here to ensure it completes
     }
