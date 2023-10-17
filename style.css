@@ -20,17 +20,7 @@ div.type-container {
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* Creates 4 equally spaced columns */
     gap: 10px; /* Space between grid items */
-    width: 30%; /* Adjust as needed */
     margin: 20px auto; /* Center the grid */
-}
-
-/* Style for the type buttons */
-button.type-button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #f2f2f2;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 button.type-button:hover {
@@ -40,4 +30,23 @@ button.type-button:hover {
 .type-button.active {
     background-color: #3498db;
     color: white;
+}
+
+.type-btn {
+    display: inline-block;
+}
+
+.type-btn input[type="checkbox"] {
+    display: none;
+}
+
+.type-btn img {
+    display: block;
+    border-radius: 8px;
+    width: 135px;
+    height: 53px;
+}
+
+.type-btn input[type="checkbox"]:checked + img {
+    box-shadow: 0 0 0 3px #000;
 }
