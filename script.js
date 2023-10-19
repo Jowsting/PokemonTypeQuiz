@@ -179,7 +179,7 @@ function resetTypeImages() {
 
 
 function getTypeImageFromCheckbox(checkbox) {
-    const typeName = checkbox.value;
+    const typeName = checkbox.id;
     return `type_images/${typeName}TypeButton.png`;
 }
 
@@ -201,7 +201,7 @@ document.getElementById('submitAnswer').addEventListener('click', function () {
         return;
     }
 
-    const selectedTypes = Array.from(activeCheckboxes).map(checkbox => checkbox.getAttribute('value'));
+    const selectedTypes = Array.from(activeCheckboxes).map(checkbox => checkbox.getAttribute('id'));
     checkAnswer(selectedTypes);
     activeCheckboxes.forEach(checkbox => checkbox.checked = false);
     fetchPokemonsForGenerations(getSelectedGenerations());
