@@ -179,7 +179,7 @@ function resetTypeImages() {
 
 
 function getTypeImageFromCheckbox(checkbox) {
-    const typeName = checkbox.id;
+    const typeName = checkbox.value;
     return `type_images/${typeName}TypeButton.png`;
 }
 
