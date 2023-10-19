@@ -155,6 +155,19 @@ body.dark-mode .type-btn img:focus {
 }
 
 /* Type Container */
+.answerImage {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.answerImage > img, .answerImage > div {
+    height: 20px;
+    object-fit: cover;
+}
+
+
 .type-container {
     margin: 10px;
     display: grid;
@@ -166,6 +179,7 @@ body.dark-mode .type-btn img:focus {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin: 0px 10px 20px 10px;
 }
 
 .typeSelectedButton input[type="checkbox"] {

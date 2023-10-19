@@ -48,6 +48,7 @@ function loadPokemon(selectedPokemonData) {
     const imageUrl = selectedPokemonData.sprites.front_default;
     const pokemonName = selectedPokemonData.name;
     pokemonTypes = selectedPokemonData.types.map(t => t.type.name);
+    console.log("Expected Types:", pokemonTypes);
 
     document.getElementById('pokemonImage').src = imageUrl;
     document.getElementById('pokemonName').innerText = pokemonTypes.length > 1 ?
@@ -56,19 +57,53 @@ function loadPokemon(selectedPokemonData) {
 
     const type2ButtonVisibility = pokemonTypes.length > 1 ? 'visible' : 'hidden';
     document.getElementById('type2Button').style.visibility = type2ButtonVisibility;
-
-
 }
 
 function checkAnswer(selectedTypes) {
-    console.log("Expected Types:", pokemonTypes);
     console.log("Selected Types:", selectedTypes);
-    const isCorrect = selectedTypes.every(type => pokemonTypes.includes(type));
 
-    if (isCorrect) {
-        document.getElementById('result').innerText = "Correct!";
-    } else {
-        document.getElementById('result').innerText = "Wrong! Try again.";
+    const answerImages = Array.from(document.querySelectorAll('.answerImage'));
+
+    const ticks = document.querySelectorAll('.answerTick');
+    ticks.forEach(tick => {
+        tick.src = `settings_images/cross.png`;
+    });
+
+    const correctTypes = document.querySelectorAll('.correctAnswerType');
+    for (var i = 0; i < pokemonTypes.length; i++) {
+        correctTypes[i].src = `type_images/${capitalize(pokemonTypes[i])}TypeButton.png`;
+    }
+
+    let index = pokemonTypes.indexOf(selectedTypes[0]);
+    findCorrectTypes(index);
+    //console.log(`Actual: ${pokemonTypes} - Slot 1 Guess: ${selectedTypes[0]}`);
+
+    if (selectedTypes.length > 1) {
+        index = pokemonTypes.indexOf(selectedTypes[1]);
+        findCorrectTypes(index);
+    }
+
+    hideCorrectTypes('visible', pokemonTypes.length);
+}
+
+function findCorrectTypes(index) {
+    if (index === -1) { return; }
+    const answerTick = document.querySelector(`#answerTick${index + 1}`);
+    //const correctAnswer = document.querySelector(`#correctAnswerType${index + 1}`);
+    answerTick.src = `settings_images/checkmark.png`;
+    //correctAnswer.src = `type_images/${capitalize(pokemonTypes[index])}TypeButton.png`;
+}
+
+function hideCorrectTypes(visibility, amount) {
+    const answerImages = Array.from(document.querySelectorAll('.answerImage'));
+    for (var i = 0; i < amount; i++)
+    {
+        const answerElement = answerImages[i];
+        const children = Array.from(answerElement.children);
+        const correctAnswer = children[0];
+        const answerTick = children[1];
+        correctAnswer.style.visibility = visibility;
+        answerTick.style.visibility = visibility;
     }
 }
 
@@ -175,6 +210,7 @@ function updateSelectedTypeImages(selectedCheckboxes) {
 function resetTypeImages() {
     document.querySelector('#type1Button img').src = "type_images/UnknownTypeButton.png";
     document.querySelector('#type2Button img').src = "type_images/UnknownTypeButton.png";
+    hideCorrectTypes('hidden', 2);
 }
 
 
@@ -205,7 +241,7 @@ document.getElementById('submitAnswer').addEventListener('click', function () {
     checkAnswer(selectedTypes);
     activeCheckboxes.forEach(checkbox => checkbox.checked = false);
     fetchPokemonsForGenerations(getSelectedGenerations());
-    setTimeout(loadRandomPokemon, 2000);
+    setTimeout(loadRandomPokemon, 3000);
 });
 
 function getSelectedGenerations() {

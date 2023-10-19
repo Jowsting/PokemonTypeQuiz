@@ -59,15 +59,35 @@
         <h1>Guess the Pok&eacute;mon Type</h1>
 
         <div id="activePokemon">
-            <label class="typeSelectedButton" id="type1Button">
-                <input type="checkbox" name="type1" value="unknown" />
-                <img src="type_images/UnknownTypeButton.png" alt="Unknown" />
-            </label>
-            <img id="pokemonImage" src="" alt="Pokemon Image">
-            <label class="typeSelectedButton" id="type2Button">
-                <input type="checkbox" name="type2" value="unknown"/>
-                <img src="type_images/UnknownTypeButton.png" alt="Unknown" />
-            </label>
+            <div class="leftSideType">
+                <label class="typeSelectedButton" id="type1Button">
+                    <input type="checkbox" name="type1" value="unknown" />
+                    <img src="type_images/UnknownTypeButton.png" alt="Unknown" />
+                </label>
+                <div class="answerImage">
+                    <img src="type_images/UnknownTypeButton.png" id="correctAnswerType1" class="correctAnswerType" alt="Unknown">
+                    <img src="settings_images/checkmark.png" id="answerTick1" class="answerTick" alt="Unknown">
+                </div>
+            </div>
+
+            <img id="pokemonImage" src="" alt="Image Not Found" onerror="handleImageError()">
+            <script>
+                let attempts = 0;
+                function handleImageError() {
+                    attempts++;
+                    if (attempts === 1) { document.getElementById('pokemonImage').src = "settings_images/favicon.png"; }
+                }
+            </script>
+            <div id="rightSideType">
+                <label class="typeSelectedButton" id="type2Button">
+                    <input type="checkbox" name="type2" value="unknown" />
+                    <img src="type_images/UnknownTypeButton.png" alt="Unknown" />
+                </label>
+                <div class="answerImage">
+                    <img src="type_images/UnknownTypeButton.png" id="correctAnswerType2" class="correctAnswerType" alt="Unknown">
+                    <img src="settings_images/checkmark.png" id="answerTick2" class="answerTick" alt="Unknown">
+                </div>
+            </div>
         </div>
 
         <div id="pokemonName"></div>
