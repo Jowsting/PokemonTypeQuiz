@@ -1,52 +1,259 @@
-body {
-    font-family: 'Roboto', sans-serif;
-    height: 100vh; /* Make the body take the full viewport height */
-    margin: 0; /* Remove default margin */
-    display: flex; /* Use flexbox */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    flex-direction: column; /* Stack children vertically */
+/* UNIVERSAL STYLES */
+* {
+    box-sizing: border-box;
 }
 
-/* Ensure the image doesn't exceed the viewport width */
+body {
+    font-family: 'Cantora One', 'Roboto', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* background-color: #f7f7f7; */
+}
+
+h1, h2 {
+    text-align: center;
+    font-family: 'Cantora One', 'Roboto', sans-serif;
+}
+
 img {
     max-width: 100%;
-    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme:dark) {
+}
+
+body.dark-mode {
+    color: #e7e7e7;
+    background-color: #3a404a;
+}
+
+body.dark-mode #submitAnswer {
+    background-color: #e7e7e7;
+    color: #3a404a;
+}
+
+body.dark-mode #submitAnswer:hover {
+    background-color: #bdbdbd;
+}
+
+body.dark-mode .type-btn input[type="checkbox"]:checked + img,
+body.dark-mode .type-btn img:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.9); /* This makes the outline white for dark mode */
 }
 
 
-/* The container for the type buttons. This will help align them in a grid */
-div.type-container {
+/* CONTAINER STYLES */
+
+.mainQuiz {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    height: 100vh; 
+    text-align: center;
+}
+
+#pokemonName {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+/* SETTINGS BUTTONS */
+/* Toggle Dark Mode */
+#darkModeToggle {
+    margin-top: 5px;
+    display: block;
+}
+
+/* Submit Button */
+
+#submitAnswer {
+    margin-top: 10px;
+    padding: 10px 15px;
+    font-size: 1.5em;
+    border: none;
+    /* border-radius: 5px; */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    background-color: #3a404a;
+    color: #ffffff;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    font-family: 'Cantora One', 'Roboto', sans-serif;
+    letter-spacing: 1px;
+}
+
+#submitAnswer:hover {
+    background-color: #272b33;
+    transform: scale(1.05);
+}
+
+#submitAnswer:active {
+    transform: scale(0.95);
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+}
+
+/* Result*/
+
+#result {
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+/* TYPES */
+
+/* Side Container */
+.side-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+#genSelectContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+#selectionButtons {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+}
+
+.settingsButton {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Type Container */
+.type-container {
+    margin: 10px;
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* Creates 4 equally spaced columns */
-    gap: 10px; /* Space between grid items */
-    margin: 20px auto; /* Center the grid */
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 10px; 
 }
 
-button.type-button:hover {
-    background-color: #ddd;
+#activePokemon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.type-button.active {
-    background-color: #3498db;
-    color: white;
+.typeSelectedButton input[type="checkbox"] {
+    display: none;
 }
 
-.type-btn {
-    display: inline-block;
-}
-
+/* Type Buttons */
 .type-btn input[type="checkbox"] {
     display: none;
 }
 
 .type-btn img {
     display: block;
-    border-radius: 8px;
     width: 135px;
     height: 53px;
+    transition: outline 0.2s ease;
+    outline: 3px solid rgba(0, 0, 0, 0.0);
 }
 
 .type-btn input[type="checkbox"]:checked + img {
-    box-shadow: 0 0 0 3px #000;
+    outline: 3px solid rgba(0, 0, 0, 0.9); 
+}
+
+.type-btn img:focus {
+    outline: 3px solid rgba(0,0,0,0.9); 
+}
+
+
+/* Generation Items */
+#genHeader {
+    text-align: center;
+    font-size: 1em;
+}
+
+.gen-item {
+    display: flex;
+    align-items: center;
+}
+
+.gen-item input[type="checkbox"] {
+    margin-left: 0;
+}
+
+/* NAVIGATION STYLES */
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    font-size: 24px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #3498db;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #2980b9;
+}
+
+/* FOOTER STYLES */
+
+.footer {
+    margin-top: 20px;
+    text-align: center;
+    color: #7f8c8d;
+}
+
+.footer a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #2980b9;
 }

@@ -2,129 +2,157 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="32x32" href="settings_images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cantora+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <title>Pokemon Quiz</title>
+    <title>Pokemon Type Quiz</title>
 </head>
 <body>
-
-    <h2 id="genHeader">Generation</h2>
-    <div id="genSelectContainer" class="sidebox">
-        <input type="checkbox" id="gen1" data-gen="1" checked />
-        <label for="gen1"><span>Gen 1</span></label>
-
-        <input type="checkbox" id="gen2" data-gen="2" checked />
-        <label for="gen2"><span>Gen 2</span></label>
-
-        <input type="checkbox" id="gen3" data-gen="3" checked />
-        <label for="gen3"><span>Gen 3</span></label>
-
-        <input type="checkbox" id="gen4" data-gen="4" checked />
-        <label for="gen4"><span>Gen 4</span></label>
-
-        <input type="checkbox" id="gen5" data-gen="5" checked />
-        <label for="gen5"><span>Gen 5</span></label>
-
-        <input type="checkbox" id="gen6" data-gen="6" checked />
-        <label for="gen6"><span>Gen 6</span></label>
-
-        <input type="checkbox" id="gen7" data-gen="7" checked />
-        <label for="gen7"><span>Gen 7</span></label>
-
-        <input type="checkbox" id="gen8" data-gen="8" checked />
-        <label for="gen8"><span>Gen 8</span></label>
-
-        <input type="checkbox" id="gen9" data-gen="9" checked />
-        <label for="gen9"><span>Gen 9</span></label>
+    <div class="side-container">
+        <div id="genSelectContainer" class="sidebox">
+            <h2 id="genHeader">GENERATIONS</h2>
+            <div class="gen-item">
+                <input type="checkbox" id="gen1" data-gen="1" checked />
+                <label for="gen1"><span>Gen 1</span></label>
+            </div>
+            <div class="gen-item">
+                <input type="checkbox" id="gen2" data-gen="2" checked />
+                <label for="gen2"><span>Gen 2</span></label>
+            </div>
+            <div class="gen-item">
+                <input type="checkbox" id="gen3" data-gen="3" checked />
+                <label for="gen3"><span>Gen 3</span></label>
+            </div>
+            <div class="gen-item">
+                <input type="checkbox" id="gen4" data-gen="4" checked />
+                <label for="gen4"><span>Gen 4</span></label>
+            </div>
+            <div class="gen-item">
+                <input type="checkbox" id="gen5" data-gen="5" checked />
+                <label for="gen5"><span>Gen 5</span></label>
+            </div>
+            <div class="gen-item">
+                <input type="checkbox" id="gen6" data-gen="6" checked />
+                <label for="gen6"><span>Gen 6</span></label>
+            </div>
+            <div class="gen-item">
+                <input type="checkbox" id="gen7" data-gen="7" checked />
+                <label for="gen7"><span>Gen 7</span></label>
+            </div>
+            <div class="gen-item">
+                <input type="checkbox" id="gen8" data-gen="8" checked />
+                <label for="gen8"><span>Gen 8</span></label>
+            </div>
+            <div class="gen-item">
+                <input type="checkbox" id="gen9" data-gen="9" checked />
+                <label for="gen9"><span>Gen 9</span></label>
+            </div>
+        </div>
+        <div id="selectionButtons">
+            <button id="selectAll" class="settingsButton">ALL</button>
+            <button id="deselectAll" class="settingsButton">NONE</button>
+        </div>
+        <button id="darkModeToggle" class="settingsButton">Toggle Dark Mode</button>
     </div>
-    <button id="selectAll">ALL</button>
-    <button id="deselectAll">NONE</button>
+    <div class="mainQuiz">
+        <h1>Guess the Pok&eacute;mon Type</h1>
 
+        <div id="activePokemon">
+            <label class="typeSelectedButton" id="type1Button">
+                <input type="checkbox" name="type1" value="unknown" />
+                <img src="type_images/UnknownTypeButton.png" alt="Unknown" />
+            </label>
+            <img id="pokemonImage" src="" alt="Pokemon Image">
+            <label class="typeSelectedButton" id="type2Button">
+                <input type="checkbox" name="type2" value="unknown"/>
+                <img src="type_images/UnknownTypeButton.png" alt="Unknown" />
+            </label>
+        </div>
 
-    <h1>Guess the Pok&eacute;mon Type</h1>
-    <img id="pokemonImage" src="" alt="Pokemon Image">
-    <div id="pokemonName"></div>
+        <div id="pokemonName"></div>
 
-    <div class="type-container">
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="bug" id="bug" />
-            <img src="type_images/BugTypeButton.png" alt="Bug Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="dark" id="dark" />
-            <img src="type_images/DarkTypeButton.png" alt="Dark Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="dragon" id="dragon" />
-            <img src="type_images/DragonTypeButton.png" alt="Dragon Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="electric" id="electric" />
-            <img src="type_images/ElectricTypeButton.png" alt="Electric Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="fairy" id="fairy" />
-            <img src="type_images/FairyTypeButton.png" alt="Fairy Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="fighting" id="fighting" />
-            <img src="type_images/FightingTypeButton.png" alt="Fighting Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="fire" id="fire" />
-            <img src="type_images/FireTypeButton.png" alt="Fire Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="flying" id="flying" />
-            <img src="type_images/FlyingTypeButton.png" alt="Flying Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="ghost" id="ghost" />
-            <img src="type_images/GhostTypeButton.png" alt="Ghost Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="grass" id="grass" />
-            <img src="type_images/GrassTypeButton.png" alt="Grass Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="ground" id="ground" />
-            <img src="type_images/GroundTypeButton.png" alt="Ground Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="ice" id="ice" />
-            <img src="type_images/IceTypeButton.png" alt="Ice Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="normal" id="normal" />
-            <img src="type_images/NormalTypeButton.png" alt="Normal Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="poison" id="poison" />
-            <img src="type_images/PoisonTypeButton.png" alt="Poison Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="psychic" id="psychic" />
-            <img src="type_images/PsychicTypeButton.png" alt="Psychic Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="rock" id="rock" />
-            <img src="type_images/RockTypeButton.png" alt="Rock Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="steel" id="steel" />
-            <img src="type_images/SteelTypeButton.png" alt="Steel Type" />
-        </label>
-        <label class="type-btn">
-            <input type="checkbox" name="type" value="water" id="water" />
-            <img src="type_images/WaterTypeButton.png" alt="Water Type" />
-        </label>
+        <div class="type-container">
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="bug" id="bug" />
+                <img src="type_images/BugTypeButton.png" alt="Bug Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="dark" id="dark" />
+                <img src="type_images/DarkTypeButton.png" alt="Dark Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="dragon" id="dragon" />
+                <img src="type_images/DragonTypeButton.png" alt="Dragon Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="electric" id="electric" />
+                <img src="type_images/ElectricTypeButton.png" alt="Electric Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="fairy" id="fairy" />
+                <img src="type_images/FairyTypeButton.png" alt="Fairy Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="fighting" id="fighting" />
+                <img src="type_images/FightingTypeButton.png" alt="Fighting Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="fire" id="fire" />
+                <img src="type_images/FireTypeButton.png" alt="Fire Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="flying" id="flying" />
+                <img src="type_images/FlyingTypeButton.png" alt="Flying Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="ghost" id="ghost" />
+                <img src="type_images/GhostTypeButton.png" alt="Ghost Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="grass" id="grass" />
+                <img src="type_images/GrassTypeButton.png" alt="Grass Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="ground" id="ground" />
+                <img src="type_images/GroundTypeButton.png" alt="Ground Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="ice" id="ice" />
+                <img src="type_images/IceTypeButton.png" alt="Ice Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="normal" id="normal" />
+                <img src="type_images/NormalTypeButton.png" alt="Normal Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="poison" id="poison" />
+                <img src="type_images/PoisonTypeButton.png" alt="Poison Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="psychic" id="psychic" />
+                <img src="type_images/PsychicTypeButton.png" alt="Psychic Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="rock" id="rock" />
+                <img src="type_images/RockTypeButton.png" alt="Rock Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="steel" id="steel" />
+                <img src="type_images/SteelTypeButton.png" alt="Steel Type" />
+            </label>
+            <label class="type-btn">
+                <input type="checkbox" name="type" value="water" id="water" />
+                <img src="type_images/WaterTypeButton.png" alt="Water Type" />
+            </label>
+        </div>
+
+        <button id="submitAnswer">SUBMIT</button>
+        <div id="result"></div>
+
+        <script src="script.js"></script>
+
     </div>
-
-    <button id="submitAnswer">Submit</button>
-
-    <div id="result"></div>
-
-    <script src="script.js"></script>
 
 </body>
 </html>

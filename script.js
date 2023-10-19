@@ -2,7 +2,28 @@
 let pokemonTypes = [];
 let currentPool = [];
 let allSelectedPokemon = [];
+let selectedCheckboxesOrder = [];
 let pokemonCache = {};
+let nextOpenSlot = 1;
+
+// ----------------- Dark Mode ------------------
+const darkModeToggle = document.getElementById("darkModeToggle");
+const body = document.body;
+
+darkModeToggle.addEventListener("click", () => {
+    body.classList.toggle("dark-mode");
+    if (body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+});
+
+const currentTheme = localStorage.getItem("theme") ? localStorage.getItem("theme") : "light";
+if (currentTheme === "dark") {
+    body.classList.add("dark-mode");
+}
+
 
 // ----------------- Pokemon Loading and Display Logic -----------------
 async function loadRandomPokemon() {
@@ -12,11 +33,18 @@ async function loadRandomPokemon() {
     }
 
     document.getElementById('result').innerText = "";
+    resetTypeImages();
+    nextOpenSlot = 1;
+    selectedCheckboxesOrder = [];
 
     const randomIndex = Math.floor(Math.random() * allSelectedPokemon.length);
     const selectedPokemonId = allSelectedPokemon[randomIndex];
     const selectedPokemonData = await getPokemonDetails(selectedPokemonId);
 
+    loadPokemon(selectedPokemonData);
+}
+
+function loadPokemon(selectedPokemonData) {
     const imageUrl = selectedPokemonData.sprites.front_default;
     const pokemonName = selectedPokemonData.name;
     pokemonTypes = selectedPokemonData.types.map(t => t.type.name);
@@ -25,6 +53,11 @@ async function loadRandomPokemon() {
     document.getElementById('pokemonName').innerText = pokemonTypes.length > 1 ?
         `What types does ${pokemonName} have?` :
         `What type does ${pokemonName} have?`;
+
+    const type2ButtonVisibility = pokemonTypes.length > 1 ? 'visible' : 'hidden';
+    document.getElementById('type2Button').style.visibility = type2ButtonVisibility;
+
+
 }
 
 function checkAnswer(selectedTypes) {
@@ -45,8 +78,18 @@ async function getPokemonDetails(id) {
     }
 
     const pokemonData = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`).then(res => res.json());
+    pokemonData.name = capitalize(pokemonData.name);
+
     pokemonCache[id] = pokemonData;
     return pokemonData;
+}
+
+function capitalize(str) {
+    return str.split('-').map(part =>
+        part.split(' ').map(word =>
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ')
+    ).join(' ');
 }
 
 // ----------------- Generation Selection Logic -----------------
@@ -58,8 +101,6 @@ document.getElementById('genSelectContainer').addEventListener('change', functio
             selectedGens.push(i);
         }
     }
-    // Save to localStorage
-    localStorage.setItem('selectedGenerations', JSON.stringify(selectedGens));
     fetchPokemonsForGenerations(selectedGens);
 });
 
@@ -76,6 +117,7 @@ const generationRanges = {
 };
 
 async function fetchPokemonsForGenerations(selectedGens) {
+    localStorage.setItem('selectedGenerations', JSON.stringify(selectedGens));
     allSelectedPokemon = [];
 
     for (let gen of selectedGens) {
@@ -84,7 +126,6 @@ async function fetchPokemonsForGenerations(selectedGens) {
             allSelectedPokemon.push(id);
         }
     }
-    console.log("allSelectedPokemon: " + allSelectedPokemon.length + "\n" + allSelectedPokemon);
 }
 
 function updateGenerationSelection(selectedGens) {
@@ -99,27 +140,54 @@ function updateGenerationSelection(selectedGens) {
 const typeCheckboxes = document.querySelectorAll('.type-btn input[type="checkbox"]');
 typeCheckboxes.forEach(checkbox => {
     checkbox.addEventListener('change', function () {
-        const activeCheckboxes = document.querySelectorAll('.type-btn input[type="checkbox"]:checked');
-
-        if (pokemonTypes.length === 1 && activeCheckboxes.length > 1) {
-            this.checked = false;
-            return;
+        if (this.checked) {
+            selectedCheckboxesOrder.push(this);
+            if (selectedCheckboxesOrder.length > 2) {
+                const uncheckedCheckbox = selectedCheckboxesOrder.shift(); // remove the oldest one
+                uncheckedCheckbox.checked = false;
+            }
+        } else {
+            const index = selectedCheckboxesOrder.indexOf(this);
+            if (index > -1) {
+                selectedCheckboxesOrder.splice(index, 1); // remove it from the array
+            }
         }
-
-        if (pokemonTypes.length === 2 && activeCheckboxes.length > 2) {
-            this.checked = false;
-            return;
-        }
+        updateSelectedTypeImages(selectedCheckboxesOrder);
     });
 });
+
+
+function updateSelectedTypeImages(selectedCheckboxes) {
+    console.log(selectedCheckboxes);
+    resetTypeImages();
+
+    if (selectedCheckboxes.length >= 1) {
+        const type1Image = getTypeImageFromCheckbox(selectedCheckboxes[0]);
+        document.querySelector('#type1Button img').src = type1Image;
+    }
+
+    if (selectedCheckboxes.length === 2) {
+        const type2Image = getTypeImageFromCheckbox(selectedCheckboxes[1]);
+        document.querySelector('#type2Button img').src = type2Image;
+    }
+}
+
+function resetTypeImages() {
+    document.querySelector('#type1Button img').src = "type_images/UnknownTypeButton.png";
+    document.querySelector('#type2Button img').src = "type_images/UnknownTypeButton.png";
+}
+
+
+function getTypeImageFromCheckbox(checkbox) {
+    const typeName = checkbox.value;
+    return `type_images/${typeName}TypeButton.png`;
+}
 
 document.getElementById('submitAnswer').addEventListener('click', function () {
     if (allSelectedPokemon.length === 0) {
         alert('Please select at least one generation before submitting.');
         return false;
     }
-
-    console.log("After return, before everything else.");
 
     const activeCheckboxes = document.querySelectorAll('.type-btn input[type="checkbox"]:checked');
 
@@ -140,7 +208,6 @@ document.getElementById('submitAnswer').addEventListener('click', function () {
     setTimeout(loadRandomPokemon, 2000);
 });
 
-// Function to get currently selected generations:
 function getSelectedGenerations() {
     const selectedGens = [];
     for (let i = 1; i <= 9; i++) {
@@ -171,24 +238,48 @@ function setAllCheckboxes(state) {
 
 // ----------------- Initialization -----------------
 window.onload = async function () {
+    document.getElementById('type2Button').style.visibility = 'hidden';
     const typeCheckboxes = document.querySelectorAll('.type-btn input[type="checkbox"]');
     typeCheckboxes.forEach(checkbox => {
         checkbox.checked = false;
     });
 
-    // Load the saved generation selections or default to Gen 1
     const savedGens = JSON.parse(localStorage.getItem('selectedGenerations'));
     if (savedGens && savedGens.length > 0) {
         for (let i = 1; i <= 9; i++) {
             document.getElementById(`gen${i}`).checked = savedGens.includes(i);
         }
-        await fetchPokemonsForGenerations(savedGens);  // Add await here to ensure it completes
+        await fetchPokemonsForGenerations(savedGens); 
     } else {
-        // Default to Gen 1
         console.log("No saved data found. Defaulting to gen 1...")
         setAllCheckboxes(false);
         document.getElementById('gen1').checked = true;
-        await fetchPokemonsForGenerations([1]);  // Add await here to ensure it completes
+        await fetchPokemonsForGenerations([1]);  
     }
     loadRandomPokemon();
 };
+
+// -------------- Console Commands -----------------
+async function setCurrentPokemon(pokemonName) {
+    if (!pokemonName || typeof pokemonName !== 'string') {
+        console.error('Please provide a valid pokemon name.');
+        return;
+    }
+
+    document.getElementById('result').innerText = "";
+
+    // Assuming getPokemonDetails can accept a Pokémon name instead of just an ID.
+    // If not, you might need another function to convert a name to ID or modify the existing one.
+    const selectedPokemonData = await getPokemonDetails(pokemonName);
+
+    if (!selectedPokemonData) {
+        console.error(`Could not fetch details for ${pokemonName}`);
+        return;
+    }
+
+    loadPokemon(selectedPokemonData);
+}
+
+// Exposing the function to window for console access
+window.setCurrentPokemon = setCurrentPokemon;
+
