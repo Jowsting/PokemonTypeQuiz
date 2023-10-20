@@ -9,7 +9,7 @@
     <title>Pokemon Type Quiz</title>
 </head>
 <body>
-    <div class="side-container">
+    <div class="side-container" id="left-container">
         <div id="genSelectContainer" class="sidebox">
             <h2 id="genHeader">GENERATIONS</h2>
             <div class="gen-item">
@@ -48,11 +48,12 @@
                 <input type="checkbox" id="gen9" data-gen="9" checked />
                 <label for="gen9"><span>Gen 9</span></label>
             </div>
+            <div id="selectionButtons">
+                <button id="selectAll" class="settingsButton">ALL</button>
+                <button id="deselectAll" class="settingsButton">NONE</button>
+            </div>
         </div>
-        <div id="selectionButtons">
-            <button id="selectAll" class="settingsButton">ALL</button>
-            <button id="deselectAll" class="settingsButton">NONE</button>
-        </div>
+
         <button id="darkModeToggle" class="settingsButton">Toggle Dark Mode</button>
     </div>
     <div class="mainQuiz">
@@ -173,6 +174,15 @@
         <script src="script.js"></script>
 
     </div>
-
+    <div class="side-container" id="right-container">
+        <div id="score-container" class="sidebox">
+            <h2 id="scoreTitle" class="settingsTitleText">Score</h2>
+            <h1 id="score" class="settingsText">0</h1>
+        </div>
+        <div id="streak-container" class="sidebox">
+            <h2 id="streakTitle" class="settingsTitleText">Streak</h2>
+            <h1 id="streak" class="settingsText">0</h1>
+        </div>
+    </div>
 </body>
 </html>

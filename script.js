@@ -5,6 +5,8 @@ let allSelectedPokemon = [];
 let selectedCheckboxesOrder = [];
 let pokemonCache = {};
 let nextOpenSlot = 1;
+let score = 0;
+let streak = 0;
 
 // ----------------- Dark Mode ------------------
 const darkModeToggle = document.getElementById("darkModeToggle");
@@ -19,7 +21,7 @@ darkModeToggle.addEventListener("click", () => {
     }
 });
 
-const currentTheme = localStorage.getItem("theme") ? localStorage.getItem("theme") : "light";
+const currentTheme = localStorage.getItem("theme") ? localStorage.getItem("theme") : "dark";
 if (currentTheme === "dark") {
     body.classList.add("dark-mode");
 }
@@ -57,54 +59,6 @@ function loadPokemon(selectedPokemonData) {
 
     const type2ButtonVisibility = pokemonTypes.length > 1 ? 'visible' : 'hidden';
     document.getElementById('type2Button').style.visibility = type2ButtonVisibility;
-}
-
-function checkAnswer(selectedTypes) {
-    console.log("Selected Types:", selectedTypes);
-
-    const answerImages = Array.from(document.querySelectorAll('.answerImage'));
-
-    const ticks = document.querySelectorAll('.answerTick');
-    ticks.forEach(tick => {
-        tick.src = `settings_images/cross.png`;
-    });
-
-    const correctTypes = document.querySelectorAll('.correctAnswerType');
-    for (var i = 0; i < pokemonTypes.length; i++) {
-        correctTypes[i].src = `type_images/${capitalize(pokemonTypes[i])}TypeButton.png`;
-    }
-
-    let index = pokemonTypes.indexOf(selectedTypes[0]);
-    findCorrectTypes(index);
-    //console.log(`Actual: ${pokemonTypes} - Slot 1 Guess: ${selectedTypes[0]}`);
-
-    if (selectedTypes.length > 1) {
-        index = pokemonTypes.indexOf(selectedTypes[1]);
-        findCorrectTypes(index);
-    }
-
-    hideCorrectTypes('visible', pokemonTypes.length);
-}
-
-function findCorrectTypes(index) {
-    if (index === -1) { return; }
-    const answerTick = document.querySelector(`#answerTick${index + 1}`);
-    //const correctAnswer = document.querySelector(`#correctAnswerType${index + 1}`);
-    answerTick.src = `settings_images/checkmark.png`;
-    //correctAnswer.src = `type_images/${capitalize(pokemonTypes[index])}TypeButton.png`;
-}
-
-function hideCorrectTypes(visibility, amount) {
-    const answerImages = Array.from(document.querySelectorAll('.answerImage'));
-    for (var i = 0; i < amount; i++)
-    {
-        const answerElement = answerImages[i];
-        const children = Array.from(answerElement.children);
-        const correctAnswer = children[0];
-        const answerTick = children[1];
-        correctAnswer.style.visibility = visibility;
-        answerTick.style.visibility = visibility;
-    }
 }
 
 async function getPokemonDetails(id) {
@@ -178,13 +132,13 @@ typeCheckboxes.forEach(checkbox => {
         if (this.checked) {
             selectedCheckboxesOrder.push(this);
             if (selectedCheckboxesOrder.length > 2) {
-                const uncheckedCheckbox = selectedCheckboxesOrder.shift(); // remove the oldest one
+                const uncheckedCheckbox = selectedCheckboxesOrder.shift();
                 uncheckedCheckbox.checked = false;
             }
         } else {
             const index = selectedCheckboxesOrder.indexOf(this);
             if (index > -1) {
-                selectedCheckboxesOrder.splice(index, 1); // remove it from the array
+                selectedCheckboxesOrder.splice(index, 1);
             }
         }
         updateSelectedTypeImages(selectedCheckboxesOrder);
@@ -193,7 +147,7 @@ typeCheckboxes.forEach(checkbox => {
 
 
 function updateSelectedTypeImages(selectedCheckboxes) {
-    console.log(selectedCheckboxes);
+    //console.log(selectedCheckboxes);
     resetTypeImages();
 
     if (selectedCheckboxes.length >= 1) {
@@ -208,8 +162,12 @@ function updateSelectedTypeImages(selectedCheckboxes) {
 }
 
 function resetTypeImages() {
-    document.querySelector('#type1Button img').src = "type_images/UnknownTypeButton.png";
-    document.querySelector('#type2Button img').src = "type_images/UnknownTypeButton.png";
+    const btn1 = document.querySelector('#type1Button img');
+    btn1.src = "type_images/UnknownTypeButton.png";
+    btn1.style.filter = 'brightness(100%)';
+    const btn2 = document.querySelector('#type2Button img');
+    btn2.src = "type_images/UnknownTypeButton.png";
+    btn2.style.filter = 'brightness(100%)';
     hideCorrectTypes('hidden', 2);
 }
 
@@ -225,24 +183,80 @@ document.getElementById('submitAnswer').addEventListener('click', function () {
         return false;
     }
 
-    const activeCheckboxes = document.querySelectorAll('.type-btn input[type="checkbox"]:checked');
-
-    if (pokemonTypes.length === 2 && activeCheckboxes.length !== 2) {
+    if (pokemonTypes.length === 2 && selectedCheckboxesOrder.length !== 2) {
         alert('Please select two types before submitting.');
         return;
     }
 
-    if (activeCheckboxes.length === 0) {
+    if (selectedCheckboxesOrder.length === 0) {
         alert('Please select a type before submitting.');
         return;
     }
 
-    const selectedTypes = Array.from(activeCheckboxes).map(checkbox => checkbox.getAttribute('id'));
+    const selectedTypes = selectedCheckboxesOrder.map(checkbox => checkbox.getAttribute('id'));
     checkAnswer(selectedTypes);
-    activeCheckboxes.forEach(checkbox => checkbox.checked = false);
+
+    selectedCheckboxesOrder.forEach(checkbox => checkbox.checked = false);
     fetchPokemonsForGenerations(getSelectedGenerations());
     setTimeout(loadRandomPokemon, 3000);
 });
+
+async function checkAnswer(selectedTypes) {
+    console.log("Selected Types:", selectedTypes);
+
+    hideCorrectTypes('hidden', pokemonTypes.length);
+
+    const ticks = document.querySelectorAll('.answerTick');
+    ticks.forEach(tick => {
+        tick.src = `settings_images/cross.png`;
+    });
+
+    const imagePromises = [];
+    const correctTypes = document.querySelectorAll('.correctAnswerType');
+    for (var i = 0; i < pokemonTypes.length; i++) {
+        const imgSrc = `type_images/${capitalize(pokemonTypes[i])}TypeButton.png`;
+        const imagePromise = new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve();
+            img.src = imgSrc;
+        });
+        imagePromises.push(imagePromise);
+        correctTypes[i].src = imgSrc;
+        let index = pokemonTypes.indexOf(selectedTypes[i]);
+        let brightness = findCorrectTypes(index);
+        document.querySelector(`#type${i + 1}Button img`).style.filter = `brightness(${brightness}%)`;
+        let scoreIncrease = index != -1 ? 1 / pokemonTypes.length : 0;
+        score += scoreIncrease;
+    }
+    updateScore();
+
+    await Promise.all(imagePromises);
+
+    hideCorrectTypes('visible', pokemonTypes.length);
+}
+
+function findCorrectTypes(index) {
+    if (index === -1) { return 50; }
+    const answerTick = document.querySelector(`#answerTick${index + 1}`);
+    answerTick.src = `settings_images/checkmark.png`;
+    return 100;
+}
+
+function hideCorrectTypes(visibility, amount) {
+    const answerImages = Array.from(document.querySelectorAll('.answerImage'));
+    for (var i = 0; i < amount; i++) {
+        const answerElement = answerImages[i];
+        const children = Array.from(answerElement.children);
+        const correctAnswer = children[0];
+        const answerTick = children[1];
+        correctAnswer.style.visibility = visibility;
+        answerTick.style.visibility = visibility;
+    }
+}
+
+function updateScore() {
+    document.getElementById('score').innerHTML = score;
+}
 
 function getSelectedGenerations() {
     const selectedGens = [];
@@ -303,9 +317,6 @@ async function setCurrentPokemon(pokemonName) {
     }
 
     document.getElementById('result').innerText = "";
-
-    // Assuming getPokemonDetails can accept a Pokémon name instead of just an ID.
-    // If not, you might need another function to convert a name to ID or modify the existing one.
     const selectedPokemonData = await getPokemonDetails(pokemonName);
 
     if (!selectedPokemonData) {

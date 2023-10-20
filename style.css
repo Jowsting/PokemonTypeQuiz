@@ -16,6 +16,8 @@ body {
 h1, h2 {
     text-align: center;
     font-family: 'Cantora One', 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 img {
@@ -31,12 +33,12 @@ img {
 
 body.dark-mode {
     color: #e7e7e7;
-    background-color: #3a404a;
+    background-color: #252630;
 }
 
 body.dark-mode #submitAnswer {
     background-color: #e7e7e7;
-    color: #3a404a;
+    color: #252630;
 }
 
 body.dark-mode #submitAnswer:hover {
@@ -48,6 +50,13 @@ body.dark-mode .type-btn img:focus {
     outline: 3px solid rgba(255, 255, 255, 0.9); /* This makes the outline white for dark mode */
 }
 
+body.dark-mode .mainQuiz {
+    background-color: #3a404a;
+}
+
+body.dark-mode .sidebox {
+    background-color: #3a3841;
+}
 
 /* CONTAINER STYLES */
 
@@ -55,9 +64,11 @@ body.dark-mode .type-btn img:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; 
-    height: 100vh; 
+    justify-content: center;
     text-align: center;
+    background-color: #ccc;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 #pokemonName {
@@ -124,11 +135,23 @@ body.dark-mode .type-btn img:focus {
 
 /* Side Container */
 .side-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-items: center;
+
+}
+
+#left-container div {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+#right-container div {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.sidebox {
     margin-bottom: 5px;
+    background-color: #919191;
+    padding: 5px 10px 5px 10px;
 }
 
 #genSelectContainer {
@@ -137,6 +160,7 @@ body.dark-mode .type-btn img:focus {
     gap: 5px;
     align-items: center;
     margin-bottom: 5px;
+    padding: 10px 5px 10px 5px;
 }
 
 #selectionButtons {
@@ -167,11 +191,10 @@ body.dark-mode .type-btn img:focus {
     object-fit: cover;
 }
 
-
 .type-container {
     margin: 10px;
     display: grid;
-    grid-template-columns: repeat(6, 1fr); 
+    grid-template-columns: repeat(3, 1fr); 
     gap: 10px; 
 }
 
